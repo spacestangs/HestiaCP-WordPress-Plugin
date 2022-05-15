@@ -4,9 +4,14 @@ i was bored so i made this
 you need to edit the server address and login details.
 
 and activate plugin
+set server deteis in admin panel will appeer a tab called Hestiacp Wordpress plugin
 
-add [sitepoint_register_form] shortcode and the form will appear
 
+add [sitepoint_info_form] shortcode and the form will appear
+
+you need to setup v-install-wordpress to make the server capable to deploy wordpress by api follow this to do it.
+https://github.com/spacestangs/hestia-wordpress-install-CLI
+ported from vestacp (still at process)
 
 
 Contributors: Spacestangs
