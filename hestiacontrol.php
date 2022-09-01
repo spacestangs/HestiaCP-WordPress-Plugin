@@ -10,6 +10,120 @@ Author URI: http://palm-tree.finance
 // Menu
 // 
  
+add_shortcode ('kiki-greet' , 'kiki_greet' ) ;
+
+function kiki_greet() {
+$user = wp_get_current_user() ;
+echo $user->display_name ;
+}
+
+add_action( 'login_form_middle', 'add_lost_password_link' );
+
+if(!function_exists('vivid_login_page'))
+{
+  function vivid_login_page()
+  {   
+	echo  '<h4>Already a member ?</h4>';
+    echo '<a href="/wp-login.php">LOGIN</a>';
+  }
+  add_shortcode('vivid-login-page', 'vivid_login_page');
+}
+
+
+
+
+function html_formdns_coded() {
+		$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
+	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
+	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
+	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
+	$current_user = wp_get_current_user();
+	$server_domain_5 = $hestia_wordpress_plugin_options['server_domain_5'];
+
+	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+	echo '<h2><strong>Set A DNS RECORD</strong></h2>';
+	echo '<p>';
+	echo '<input type="text" name="cf-registerdns" value="record"' . ( isset( $_POST["cf-registerdns"] ) ? esc_attr( $_POST["cf-registerdns"] ) : '' ) . '" size="35" />';
+	echo '.'.$server_domain_5.'';
+	echo '</p>';
+	
+	echo '<p>';
+	echo '<input type="text" name="cf-registerdnsip"  value="ip"' . ( isset( $_POST["cf-registerdnsip"] ) ? esc_attr( $_POST["cf-registerdnsip"] ) : '' ) . '" size="35" />' ;
+	echo '</p>';
+	
+	echo '<p><input type="submit" name="cf-registerdns" value="register"></p>';
+	do_action( 'anr_captcha_form_field' );
+	echo '</form>';
+}
+
+
+function registerdns_now() {
+	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
+	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
+	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
+	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
+	$server_domain_5 = $hestia_wordpress_plugin_options['server_domain_5'];
+	$current_user = wp_get_current_user();
+
+
+	// if the submit button is clicked, send the email
+	if ( isset( $_POST['cf-registerdns'] ) ) {
+
+		// sanitize form values
+		$hst_hostname = $server_ip_0;
+		$hst_port = $port_1;
+		$hst_hash= $api_hash_2;
+		$hst_returncode = 'yes';
+		$hst_command = 'v-add-dns-record';
+		$first_name = 'WordPress';
+		$last_name = 'user';
+		$username = $current_user->user_login;
+		$domain = $server_domain_5;
+		$ip = sanitize_text_field( $_POST["cf-registerdnsip"] );
+		$record = 'A';
+		$www= 'www';
+		// Prepare POST query
+	$postvars = array(
+		'hash' => $hst_hash,
+    	'returncode' => $hst_returncode,
+    	'cmd' => $hst_command,
+    	'arg1' => $username,
+    	'arg2' => $domain,
+		'arg4' => $www,
+		'arg5' => $record,
+		'arg6' => $ip
+	);
+
+	// Send POST query via cURL
+	$postdata = http_build_query($postvars);
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_URL, 'https://' . $hst_hostname . ':' . $hst_port . '/api/');
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($curl, CURLOPT_POST, true);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
+	$answer = curl_exec($curl);
+
+	// Check result
+	if($answer == 0) {
+		echo "<script>alert('registered successfully !');</script>";
+	} else {
+		echo "Query returned error code: " .$answer. "\n";
+	}
+	}
+}
+function rf_shortcodedns() {
+			ob_start();
+	registerdns_now();
+	html_formdns_coded();
+
+	return ob_get_clean();
+}
+add_shortcode( 'sitepoint_dns_form', 'rf_shortcodedns' );
+
+
+
 function html_form_code() {
 	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
 	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
@@ -96,7 +210,7 @@ function register_now() {
 
     	// Check result
 		if($answer == 0) {
-    echo "registered successfully\n";
+    echo "<script>alert('registered successfully !');</script>";
 			$to = $email; //sendto@example.com
 			$subject = 'Welcome to HestiaCP Your password is inside';
 			$body = 'HI!, '.$username.' Your Password is: '.$password;
@@ -108,6 +222,7 @@ function register_now() {
 }
 		} else {
   	//	  echo "Query returned error code: " .$answer. "\n";
+
 		}
 	}
 	
@@ -123,6 +238,12 @@ add_shortcode( 'sitepoint_register_form', 'rf_shortcode' );
 
 
 function html_form_coded() {
+	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
+	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
+	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
+	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
+	$current_user = wp_get_current_user();
+	$server_domain_5 = $hestia_wordpress_plugin_options['server_domain_5'];
 	
 	
 	
@@ -131,7 +252,7 @@ function html_form_coded() {
 	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
 	
 	echo '<p>';
-	echo '<input type="text" name="cf-subdomian" pattern="[a-zA-Z][a-zA-Z0-9-_.]+" value="' . ( isset( $_POST["cf-subdomian"] ) ? esc_attr( $_POST["cf-subdomian"] ) : '' ) . '" size="35" /> .palm-tree.finance' ;
+	echo '<input type="text" name="cf-subdomian" pattern="[a-zA-Z][a-zA-Z0-9-_.]+" value="' . ( isset( $_POST["cf-subdomian"] ) ? esc_attr( $_POST["cf-subdomian"] ) : '' ) . '" size="35" /> '.$server_domain_5.'' ;
 	echo '</p>';
 	
 
@@ -145,11 +266,12 @@ function registerdomian_now() {
 	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
 	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
 	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
+	$server_domain_5 = $hestia_wordpress_plugin_options['server_domain_5']; // API Hash
 	$current_user = wp_get_current_user();
-
 
 	// if the submit button is clicked, send the email
 	if ( isset( $_POST['cf-submittedd'] ) ) {
+		echo "<meta http-equiv='refresh' content='0'>";
 
 		// sanitize form values
 		$hst_hostname = $server_ip_0;
@@ -162,7 +284,7 @@ function registerdomian_now() {
 		$last_name = 'user';
 		
 		$username = $current_user->user_login;
-		$domain = sanitize_text_field( $_POST["cf-subdomian"] ) . '.palm-tree.finance';
+		$domain =sanitize_text_field( $_POST["cf-subdomian"] ) . '.' . $server_domain_5;
 		$ip = $server_ip_0;
 		// Prepare POST query
 	$postvars = array(
@@ -184,6 +306,7 @@ function registerdomian_now() {
 	curl_setopt($curl, CURLOPT_POST, true);
 	curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
 	$answer = curl_exec($curl);
+
 
 	// Check result
 	if($answer == 0) {
@@ -222,6 +345,7 @@ class HestiaWordpressPlugin {
 		);
 	}
 
+	
 	public function hestia_wordpress_plugin_create_admin_page() {
 		$this->hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' ); ?>
 
@@ -263,7 +387,15 @@ class HestiaWordpressPlugin {
 			'hestia-wordpress-plugin-admin', // page
 			'hestia_wordpress_plugin_setting_section' // section
 		);
-
+		
+		add_settings_field(
+			'server_domain_5', // id
+			'Domain', // title
+			array( $this, 'server_domain_5_callback' ), // callback
+			'hestia-wordpress-plugin-admin', // page
+			'hestia_wordpress_plugin_setting_section' // section
+		);
+		
 		add_settings_field(
 			'port_1', // id
 			'port', // title
@@ -318,6 +450,9 @@ class HestiaWordpressPlugin {
 		if ( isset( $input['default_welcome_msg_4'] ) ) {
 			$sanitary_values['default_welcome_msg_4'] = esc_textarea( $input['default_welcome_msg_4'] );
 		}
+		if ( isset( $input['server_domain_5'] ) ) {
+			$sanitary_values['server_domain_5'] = sanitize_text_field( $input['server_domain_5'] );
+		}
 
 		return $sanitary_values;
 	}
@@ -358,6 +493,12 @@ class HestiaWordpressPlugin {
 		printf(
 			'<textarea class="large-text" rows="5" name="hestia_wordpress_plugin_option_name[default_welcome_msg_4]" id="default_welcome_msg_4">%s</textarea>',
 			isset( $this->hestia_wordpress_plugin_options['default_welcome_msg_4'] ) ? esc_attr( $this->hestia_wordpress_plugin_options['default_welcome_msg_4']) : ''
+		);
+	}
+	public function server_domain_5_callback() {
+		printf(
+			'<input class="regular-text" type="text" name="hestia_wordpress_plugin_option_name[server_domain_5]" id="server_domain_5" value="%s">',
+			isset( $this->hestia_wordpress_plugin_options['server_domain_5'] ) ? esc_attr( $this->hestia_wordpress_plugin_options['server_domain_5']) : ''
 		);
 	}
 
@@ -457,19 +598,22 @@ function rf_shortcodeinfo() {
 	domaininfo_now();
 	domaininfomore_now();
 	domainlist_now();
-
-
 	return ob_get_clean();
 }
 add_shortcode( 'sitepoint_info_form', 'rf_shortcodeinfo' );
 
+
+//forgot server fassword short code
 function rf_shortcodepass() {
+	
 	ob_start();
-	echo '<a href="https://"'.$server_ip_0.':8083/reset/" target="_blank">Reset Your Password</a>';
+	echo '<a href="https://"'.$server_ip_0.':8083/reset/" >Reset Your Password</a>';
 
 	return ob_get_clean();
 }
 add_shortcode( 'sitepoint_pass_form', 'rf_shortcodepass' );
+
+
 /////////more
 //
 function domaininfomore_now() {
@@ -478,7 +622,6 @@ function domaininfomore_now() {
 	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
 	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
 	$current_user = wp_get_current_user();
-
 
 	// if the submit button is clicked, send the email
 	// if(!isset($_SESSION)) session_start();
@@ -529,10 +672,11 @@ $data = json_decode($answer, true);
 			echo '<td>'. $result['U_DISK_MAIL'] .'</td>';
 			echo '<td>'. $result['U_DISK_DB'] .'</td>';
 
-
           echo '</tr>';
         }
         echo '</table>';
+	
+	
 		foreach($data as $result){
 	if($result['U_WEB_DOMAINS'] == "0") {
 		echo '<h2"><strong>Create Your First WebSite On PalmTree Choose Your FREE DOMAIN NAME</strong></h2>';
@@ -546,7 +690,7 @@ $data = json_decode($answer, true);
 		echo "[sitepoint_register_form]";
 	}
 
-
+}
 
 function domainlist_now() {
 	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
@@ -597,62 +741,153 @@ $data = json_decode($answer, true);
 //}
 foreach ($data as $key => $item) {
     $domain = $key; // echo the "unknown" field name
-    $domain2 = $item['classid']; // echo any field value
-}
-        echo '<table>';
-        foreach($data as $result){
+	echo '<table>';
+       foreach($data as $key){
           echo '<tr><td>DOMAINS</td><td>IP</td><td>SSL</td><td>DOCUMENT ROOT</td></tr>';
             echo '<td>'. '<a target="_blank" href="http://'.$domain.'">'.$domain.'</a>' .'</td>'; 
-			echo '<td>'. $result['IP'] .'</td>';
-			echo '<td>'. $result['SSL'] .'</td>';
-			echo '<td>'. $result['DOCUMENT_ROOT'] .'</td>';
-
+			echo '<td>'. $key['IP'] .'</td>';
+			echo '<td>'. $key['SSL'] .'</td>';
+			echo '<td>'. $key['DOCUMENT_ROOT'] .'</td>';
 
           echo '</tr>';
+				
         }
         echo '</table>';
-	}
+}
+	
+}
+function rf_domainlist_now() {
+	ob_start();
+	domainlist_now();
+	return ob_get_clean();
+}
+add_shortcode( 'sitepoint_domainlist_now', 'rf_domainlist_now' );
 	
 	
 	
 	
-	// wordpress install
+		// enable ssl
 	// 
-function html_form_wp() {
+function html_form_wpssl() {
 	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
 	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
 	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
 	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
 	$current_user = wp_get_current_user();
 
+	
+	
+	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+	echo '<div>';
+	echo '<h2><strong>ssl-enabler</strong></h2>';
+	
 	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
 	
+	echo '<h6><strong>Confirm installation by entering wanted domain name</label></h6>';
+	echo '<input type="text" name="cf-domainnnssl"  value="' . ( isset( $_POST["cf-domainnnssl"] ) ? esc_attr( $_POST["cf-domainnnssl"] ) : '' ) . '" size="30" />' ;
+
+	echo '<p><input type="submit" name="cf-submittewpssl" value=" enable ssl"></p>';
+	do_action( 'anr_captcha_form_field' );
+	echo '</form>';
+	
+	
+}
+
+function sslwp_now() {
+	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
+	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
+	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
+	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
+	$current_user = wp_get_current_user();
+
+
+
+	if ( isset( $_POST['cf-submittewpssl'] ) ) {
+
+		// sanitize form values
+		$hst_hostname = $server_ip_0;
+		$hst_port = $port_1;
+		$hst_hash= $api_hash_2;
+		$hst_returncode = 'no';
+		$hst_command = 'v-install-wp-ssl-enable';
+		
+		$adminmail = sanitize_text_field( $_POST["cf-adminmail"] );
+		$adminuser = sanitize_text_field( $_POST["cf-adminuser"] );
+		$adminpass = sanitize_text_field( $_POST["cf-adminpass"] );
+		$wptitle = sanitize_text_field( $_POST["cf-wptitle"] );
+		$wpname = sanitize_text_field( $_POST["cf-wpname"] );
+		$wplname = sanitize_text_field( $_POST["cf-wplname"] );
+		$domiann = sanitize_text_field( $_POST["cf-domainnnssl"] );
+		$username = $current_user->user_login;
+		$email = $current_user->user_email;
+		$first_name = 'WordPress';
+		$last_name = 'user';
+		$path = '/';
+		$https = 'no';
+
+		
+
+		$postvars = array(
+    	'hash' => $hst_hash,
+    	'cmd' => $hst_command,
+    	'arg1' => $username,
+    	'arg2' => $domiann,
+	);
+
+	// Send POST query via cURL
+	$postdata = http_build_query($postvars);
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_URL, 'https://' . $hst_hostname . ':' . $hst_port . '/api/');
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($curl, CURLOPT_POST, true);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
+	$answer = curl_exec($curl);
+
+	// Check result
+		echo "SSL Enabled Secessfuly successfully !'.$answer.'";
+
+
+	}
+}
+	
+
+function rf_shortcodssl() {
+	ob_start();
+	html_form_wpssl();
+	sslwp_now();
+	return ob_get_clean();
+}
+add_shortcode( 'sitepoint_wpssl_form', 'rf_shortcodssl' );
+	
+	
+	
+	
+	
+	// wordpress install
+	// 
+
+	
+	//depoly wp script
+
+function html_form_wp() {
+	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
+	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
+	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
+	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
+	$current_user = wp_get_current_user();
+	
+
+	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
+	echo '<div>';
 	echo '<h2><strong>Fast WordPress installer</strong></h2>';
-	echo '<p> example : v-install-wordpress spacestangs anan.media spacestangs@gmail.com admin a963852711 / "My Title" Azad Shaikh no</p>';	
 	
 	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
 	
-	echo '<label><strong>domain</label></h6>';
+	echo '<h6><strong>Confirm installation by entering wanted domain name</label></h6>';
 	echo '<input type="text" name="cf-domainnn"  value="' . ( isset( $_POST["cf-domainnn"] ) ? esc_attr( $_POST["cf-domainnn"] ) : '' ) . '" size="30" />' ;
 
-	echo '<h6><strong>admin mail</strong></h6>';
-	echo '<input type="text" name="cf-adminmail" value="' . ( isset( $_POST["cf-adminmail"] ) ? esc_attr( $_POST["cf-adminmail"] ) : '' ) . '" size="30" />' ;
-
-	echo '<h6><strong>admin user</strong></h6>';
-	echo '<input type="text" name="cf-adminuser" value="' . ( isset( $_POST["cf-adminuser"] ) ? esc_attr( $_POST["cf-adminuser"] ) : '' ) . '" size="30" />' ;
-	
-	echo '<h6><strong>admin pass</strong></h6>';
-	echo '<input type="text" name="cf-adminpass" value="' . ( isset( $_POST["cf-adminpass"] ) ? esc_attr( $_POST["cf-adminpass"] ) : '' ) . '" size="30" />' ;
-	
-	echo '<h6><strong>Wordpress Title</strong></h6>';
-	echo '<input type="text" name="cf-wptitle"  value="' . ( isset( $_POST["cf-wptitle"] ) ? esc_attr( $_POST["cf-wptitle"] ) : '' ) . '" size="30" />' ;
-
-	echo '<h6><strong>name</strong></h6>';
-	echo '<input type="text" name="cf-wpname" pattern="[a-zA-Z][a-zA-Z0-9-_.]+" value="' . ( isset( $_POST["cf-wpname"] ) ? esc_attr( $_POST["cf-wpname"] ) : '' ) . '" size="30" />' ;
-
-	
-	echo '<h6><strong>last name</strong></h6>';
-	echo '<input type="text" name="cf-wplname" pattern="[a-zA-Z][a-zA-Z0-9-_.]+" value="' . ( isset( $_POST["cf-wplname"] ) ? esc_attr( $_POST["cf-wplname"] ) : '' ) . '" size="30" height="10" />' ;
 
 
 	echo '<p><input type="submit" name="cf-submittewp" value="Deploy wordpress"></p>';
@@ -670,13 +905,12 @@ function deploywp_now() {
 
 
 	if ( isset( $_POST['cf-submittewp'] ) ) {
-		echo "<meta http-equiv='refresh' content='0'>";
 
 		// sanitize form values
 		$hst_hostname = $server_ip_0;
 		$hst_port = $port_1;
 		$hst_hash= $api_hash_2;
-		$hst_returncode = 'yes';
+		$hst_returncode = 'no';
 		$hst_command = 'v-install-wordpress';
 		
 		$adminmail = sanitize_text_field( $_POST["cf-adminmail"] );
@@ -694,21 +928,13 @@ function deploywp_now() {
 		$https = 'no';
 
 		
-//	echo '<p> example : v-install-wordpress spacestangs anan.media spacestangs@gmail.com admin a963852711 / "My Title" Azad Shaikh no</p>';	
 
 		$postvars = array(
     	'hash' => $hst_hash,
     	'cmd' => $hst_command,
     	'arg1' => $username,
     	'arg2' => $domiann,
-		'arg3' => $adminmail,
-		'arg4' => $adminuser,
-		'arg5' => $adminpass,
-		'arg6' => $path,
-		'arg7' => $wptitle,
-		'arg8' => $wpname,
-		'arg9' => $wplname,
-		'arg10' => $https
+		'arg3' => $path
 	);
 
 	// Send POST query via cURL
@@ -723,20 +949,18 @@ function deploywp_now() {
 	$answer = curl_exec($curl);
 
 	// Check result
-	if($answer == 0) {
-		echo "<script>alert('registered successfully !'.$answer.);</script>";
-	} else {
-		echo "<script>alert('error !'.$answer.);</script>";
-	}
+		echo "registered successfully !'.$answer.'";
+
+
 	}
 }
 	
 
 function rf_shortcodee() {
 	ob_start();
+	domainlist_now();
 	html_form_wp();
 	deploywp_now();
-
 
 	return ob_get_clean();
 }
@@ -745,19 +969,8 @@ add_shortcode( 'sitepoint_deploywp_form', 'rf_shortcodee' );
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+		
 	
 	
 	
@@ -765,6 +978,14 @@ add_shortcode( 'sitepoint_deploywp_form', 'rf_shortcodee' );
 	
 	
 	//admin info
+add_action('wp_dashboard_setup', 'server_dashboard_widgets');
+  
+function server_dashboard_widgets() {
+global $wp_meta_boxes;
+
+ 
+wp_add_dashboard_widget('wp_dashboard_setup', 'Hestia Server Status', 'admininfo_now');
+}
 	
 	function admininfo_now() {
 	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
@@ -828,77 +1049,11 @@ $data = json_decode($answer, true);
 	admininfo_now();
 	return ob_get_clean();
 }
+	
 add_shortcode( 'sitepoint_admininfo', 'rf_shortcodeadmininfo' );
-	//change pass
-	//
-	function changepass_now() {
 
-	$current_user = wp_get_current_user();
+
 	
-	echo '<form action="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
-	
-	echo '<p>';
-	echo '<p>Choose a new password</p>';
-	echo '<input type="text" name="cf-changepass" pattern="[a-zA-Z][a-zA-Z0-9-_.]+" value="' . ( isset( $_POST["cf-changepass"] ) ? esc_attr( $_POST["cf-changepass"] ) : '' ) . '" size="35" /> ' ;
-	echo '</p>';
-	
-
-	echo '<p><input type="submit" name="cf-changepass" value="changepass"></p>';
-	do_action( 'anr_captcha_form_field' );
-	echo '</form>';
-
-		
-	$hestia_wordpress_plugin_options = get_option( 'hestia_wordpress_plugin_option_name' );
-	$server_ip_0 = $hestia_wordpress_plugin_options['server_ip_0']; // Server IP
-	$port_1 = $hestia_wordpress_plugin_options['port_1']; // port
-	$api_hash_2 = $hestia_wordpress_plugin_options['api_hash_2']; // API Hash
-	$current_user = wp_get_current_user();
-	// if the submit button is clicked, send the email
-	// if(!isset($_SESSION)) session_start();
-	if(!isset($_SESSION)) session_start();
-
-		// sanitize form values
-		$hst_hostname = $server_ip_0;
-		$hst_port = $port_1;
-		$hst_hash= $api_hash_2;
-		$hst_returncode = 'no';
-		$hst_command = 'v-change-user-password';
-		$username = $current_user->user_login;
-		$format = 'json';
-
-// Prepare POST query
-$postvars = array(
-	'hash' => $hst_hash,
-    'returncode' => $hst_returncode,
-    'cmd' => $hst_command,
-	'arg1' => $username,
-    'arg2' => $changepass
-);
-
-// Send POST query via cURL
-$postdata = http_build_query($postvars);
-$curl = curl_init();
-curl_setopt($curl, CURLOPT_URL, 'https://' . $hst_hostname . ':' . $hst_port . '/api/');
-curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
-$answer = curl_exec($curl);
-
-
-// Parse JSON output
-
-$data = json_decode($answer, true);
-//foreach($json_decoded as $data){
-//print_r($data);
-//} 
-	}
-}
-
-
-
-
 
 
 
