@@ -1,5 +1,4 @@
 === hestiacp-register ===
-i was bored so i made this
 
 you need to edit the server address and login details.
 
@@ -7,7 +6,13 @@ and activate plugin
 set server deteis in admin panel will appeer a tab called Hestiacp Wordpress plugin
 
 
-add [sitepoint_info_form] shortcode and the form will appear
+add [sitepoint_info_form] shortcode and the form will appear and give info if user is not register in hosting so it will ask for user to chouse new password for server.
+[sitepoint_register_form] register new user form
+[sitepoint_registerd_form] register subdomain form
+[sitepoint_wpssl_form] enable ssl form
+[sitepoint_deploywp_form] deploy wordpress form
+[sitepoint_admininfo] the info shown in dashboard you can show in any where with this code.
+
 
 you need to setup v-install-wordpress to make the server capable to deploy wordpress by api follow this to do it.
 https://github.com/spacestangs/hestia-wordpress-install-CLI
