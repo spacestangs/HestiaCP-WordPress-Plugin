@@ -1,0 +1,77 @@
+.wpinstall h2{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+    padding: 5px;
+    color: rebeccapurple;
+}
+.wpinstall {
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px;
+	color: rebeccapurple;
+	background-color: ivory;
+}
+.wpinstall h5{
+  	margin-left: 10px;
+	margin-right: auto;
+    color: #c84040;
+}
+.wpinstall input{
+  width: 100%;
+}
+.wpinstall p{
+    margin-left: px;
+    margin-bottom: 0em;
+}
+
+.infotableh{
+    color: rebeccapurple;
+}
+.infotableh td{
+    color: rebeccapurple;
+}
+.infotableh tr{
+    color: blue;
+}
+
+.infotableh table{
+    border-collapse: separate;
+    border-spacing: 0;
+    border-width: 2px 1 1 1px;
+    margin: 0 0 1.5em;
+    width: 100%;
+}
+.registerform h2{
+  color: rebeccapurple;
+}
+table, th, td {
+  border: 1px solid;
+}
+
+.subdomian h2{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+    padding: 5px;
+    color: rebeccapurple;
+}
+.subdomian {
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px;
+	color: rebeccapurple;
+	background-color: ivory;
+}
+.subdomian h5{
+  	margin-left: 10px;
+	margin-right: auto;
+    color: #c84040;
+}
+.subdomian input{
+  padding: 10px;
+}
+.subdomian p{
+    margin-left: px;
+    margin-bottom: 0em;
+}
