@@ -1,9 +1,8 @@
-=== hestiacp-register ===
+=== hestiacp-Wordpress plugin ===
+now you can sell hosting packages with woocommerce
 
-you need to edit the server address and login details.
-
-and activate plugin
-set server deteis in admin panel will appeer a tab called Hestiacp Wordpress plugin
+download and activate plugin
+set server details in admin panel will appear a tab called Hestiacp Wordpress plugin
 
 
 add [sitepoint_info_form] shortcode and the form will appear and give info if user is not register in hosting so it will ask for user to chouse new password for server.
