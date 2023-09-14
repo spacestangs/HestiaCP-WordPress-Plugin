@@ -7,20 +7,31 @@
 }
 .wpinstall {
 	padding: 20px;
-	color: rebeccapurple;
+	color: black;
 	background-color: #fffff057;
+}
+
+.wpinstallhead {
+    background: #ffffff82;
 }
 .wpinstall h5{
   	margin-left: 10px;
+	padding: 15px;
 	//*margin-right: auto; //*//
     color: #c84040;
 }
 .wpinstall input{
-  width: 100%;
+    margin: 10px;
 }
 .wpinstall p{
     margin-left: px;
     margin-bottom: 0em;
+}
+
+.Welcometext {
+    background: #ffffff5e;
+    padding: 15px;
+    border-bottom-style: inset;
 }
 
 .wpiinput input{
@@ -70,22 +81,21 @@ h5 {
 }
 
 .btns {
-	margin: 5px;
-	border-style: groove;
-	background-color: #fffff030;
+	width: 100%;
+    margin: 5px;
+    border-style: groove;
+    background-color: #fffff030;
     display: flex;
     padding: 5px;
-    align-items: stretch;
-    justify-content: space-evenly;
-    flex-direction: row-reverse;
 }
 .btns a {
-margin-bottom: 10px;
+	width: 100%;
+	margin-bottom: 10px;
 	margin-left: 10px;
 	float: left;
 	display: grid !important;
 	align-content: space-around;
-	background: #6b5b95;
+	background: white;
 	padding: 10px;
 	text-align: center;
 	border-radius: 5px;
@@ -93,6 +103,9 @@ margin-bottom: 10px;
 	font-weight: bold;
 	line-height: 25px;"
 }
+
+
+
 
 .tip1 strong {
     color: black;
