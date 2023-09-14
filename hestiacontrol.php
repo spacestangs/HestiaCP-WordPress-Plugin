@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Hestiacp Wordpress control plugin
-Description: Hestiacp Wordpress DOMIAN info 
-Version: 1.0011
+Plugin Name: Hestiacp Wordpress Control Panel plugin
+Description: Use Wordpress as a Control panel for Hestiacp, let users register to your hosting buy subscriptions and manage thier site.
+Version: 1.0013
 Author: Alex reznik
 Author URI: http://anan.media
 Text Domain: Hestiacp-Wordpress
@@ -25,11 +25,12 @@ function addmycssandmyjsfiles()
         "new-style",
         plugins_url("/css/new-style.css", __FILE__),
         false,
-        "1.1.7",
+        "1.2.1",
         "all"
     );
 }
 add_action("wp_enqueue_scripts", "addmycssandmyjsfiles");
+
 
 add_shortcode("display_uname", "display_uname");
 function display_uname()
@@ -344,108 +345,7 @@ function check_user_subscriptions()
         echo $upgrademsg;
     }
 }
-function html_formdns_coded()
-{
-    $hestia_wordpress_plugin_options = get_option(
-        "hestia_wordpress_plugin_option_name"
-    );
-    $server_ip_0 = $hestia_wordpress_plugin_options["server_ip_0"]; // Server IP
-    $port_1 = $hestia_wordpress_plugin_options["port_1"]; // port
-    $api_hash_2 = $hestia_wordpress_plugin_options["api_hash_2"]; // API Hash
-    $current_user = wp_get_current_user();
-    $server_domain_5 = $hestia_wordpress_plugin_options["server_domain_5"];
-    echo '<form action="' .
-        esc_url($_SERVER["REQUEST_URI"]) .
-        '" method="post">';
-    echo __("<h2><strong>Set A DNS RECORD</strong>", "Hestiacp-Wordpress");
-    echo "<p>";
-    echo '<input type="text" name="cf-registerdns" value="record"' .
-        (isset($_POST["cf-registerdns"])
-            ? esc_attr($_POST["cf-registerdns"])
-            : "") .
-        '" size="35" />';
-    echo "." . $server_domain_5 . "";
-    echo "</p>";
-    echo "<p>";
-    echo '<input type="text" name="cf-registerdnsip"  value="ip"' .
-        (isset($_POST["cf-registerdnsip"])
-            ? esc_attr($_POST["cf-registerdnsip"])
-            : "") .
-        '" size="35" />';
-    echo "</p>";
-    $submit_text = __("submit", "Hestiacp-Wordpress");
-    echo '<p><input type="submit" name="cf-registerdns" value="' .
-        $submit_text .
-        '"></p>';
-    do_action("anr_captcha_form_field");
-    echo "</form>";
-}
-function registerdns_now()
-{
-    $hestia_wordpress_plugin_options = get_option(
-        "hestia_wordpress_plugin_option_name"
-    );
-    $server_ip_0 = $hestia_wordpress_plugin_options["server_ip_0"]; // Server IP
-    $port_1 = $hestia_wordpress_plugin_options["port_1"]; // port
-    $api_hash_2 = $hestia_wordpress_plugin_options["api_hash_2"]; // API Hash
-    $server_domain_5 = $hestia_wordpress_plugin_options["server_domain_5"];
-    $current_user = wp_get_current_user();
-    // if the submit button is clicked, send the email
-    if (isset($_POST["cf-registerdns"])) {
-        // sanitize form values
-        $hst_hostname = $server_ip_0;
-        $hst_port = $port_1;
-        $hst_hash = $api_hash_2;
-        $hst_returncode = "yes";
-        $hst_command = "v-add-dns-record";
-        $first_name = "WordPress";
-        $last_name = "user";
-        $username = $current_user->user_login;
-        $domain = $server_domain_5;
-        $ip = sanitize_text_field($_POST["cf-registerdnsip"]);
-        $record = "A";
-        $www = sanitize_text_field($_POST["cf-cf-registerdns"]);
-        // Prepare POST query
-        $postvars = [
-            "hash" => $hst_hash,
-            "returncode" => $hst_returncode,
-            "cmd" => $hst_command,
-            "arg1" => $username,
-            "arg2" => $domain,
-            "arg4" => $www,
-            "arg5" => $record,
-            "arg6" => $ip,
-        ];
-        // Send POST query via cURL
-        $postdata = http_build_query($postvars);
-        $curl = curl_init();
-        curl_setopt(
-            $curl,
-            CURLOPT_URL,
-            "https://" . $hst_hostname . ":" . $hst_port . "/api/"
-        );
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
-        $answer = curl_exec($curl);
-        // Check result
-        if ($answer == 0) {
-            echo "<script>alert('registered successfully !');</script>";
-        } else {
-            echo "Query returned error code: " . $answer . "\n";
-        }
-    }
-}
-function rf_shortcodedns()
-{
-    ob_start();
-    registerdns_now();
-    html_formdns_coded();
-    return ob_get_clean();
-}
-add_shortcode("wpshort_dns_form", "rf_shortcodedns");
+
 
 function html_form_code()
 {
@@ -465,18 +365,32 @@ function html_form_code()
         esc_url($_SERVER["REQUEST_URI"]) .
         '" method="post">';
     echo '<div class=wpinstall style="new-style" >';
-    echo "<h2 style=align: center;><strong>" .
-        $default_welcome_msg_4 .
-        "</strong><br></h2>";
+    echo '<div class=wpinstallhead style="new-style" >';
+	    echo __(
+        "<h2 style=align: center;><strong>Wellcome</strong><br></h2>",
+        "Hestiacp-Wordpress"
+    );	
+	echo '</div>';
     echo "<p> </p>";
+    echo '<div class=Welcometext style="new-style" >';
+    echo __(
+        "<p style=align: center;><strong>" .
+        $default_welcome_msg_4 .
+        "</strong><br></p>");
+    echo '</div>';
 
 	
-	
-    echo '<div class=wpisub style="new-style" >';
+    echo '<div class=Welcometext style="new-style" >';
     echo __(
-        "<strong>Before we start you need to agree to our 'terms and conditions'</strong>",
+        "<strong>Before we start you need to agree to our <p> <a href='https://anan.media/2023/08/24/free-hosting-terms-and-conditions/' target='popup' onclick='window.open('https://anan.media/2023/08/24/free-hosting-terms-and-conditions/,'popup','width=600,height=600'); return false;'>terms and conditions</a> </p> </strong>" ,
         "Hestiacp-Wordpress"
     );
+    echo '<div class=Welcometextpass style="new-style" >';	
+    echo __(
+        "After accepting the terms of use the password for cpanel will be sent by Email",
+        "Hestiacp-Wordpress"
+    );	
+    echo "</div>";
     echo '<div class="checkbox-group required" style="new-style" >';
     echo __(
         "<strong> I Agree </strong>",
@@ -484,6 +398,8 @@ function html_form_code()
     );
     echo '<input type="checkbox" required name="checkbox" value="check" id="agree" />'  ;
     echo "</div>";
+	echo '</div>';
+
     echo '<p><input type="submit" name="cf-submitted" value="submit","Hestiacp-Wordpress"></p>';
     do_action("anr_captcha_form_field");
     echo "</div>";
@@ -593,7 +509,6 @@ function html_form_coded()
     $port_1 = $hestia_wordpress_plugin_options["port_1"]; // port
     $api_hash_2 = $hestia_wordpress_plugin_options["api_hash_2"]; // API Hash
     $current_user = wp_get_current_user();
-    $server_domain_5 = $hestia_wordpress_plugin_options["server_domain_5"];
     $default_shared_1 = $hestia_wordpress_plugin_options["default_shared_1"];
     $default_shared_2 = $hestia_wordpress_plugin_options["default_shared_2"];
     $current_user = wp_get_current_user();
@@ -639,7 +554,6 @@ function registerdomian_now()
     $server_ip_0 = $hestia_wordpress_plugin_options["server_ip_0"]; // Server IP
     $port_1 = $hestia_wordpress_plugin_options["port_1"]; // port
     $api_hash_2 = $hestia_wordpress_plugin_options["api_hash_2"]; // API Hash
-    $server_domain_5 = $hestia_wordpress_plugin_options["server_domain_5"]; // API Hash
     $current_user = wp_get_current_user();
     // if the submit button is clicked, send the email
     if (isset($_POST["cf-submittedd"])) {
@@ -798,28 +712,28 @@ function domaininfo_now()
         "</a>";
 
     if ($default_menu_button_name_1) {
-        echo '<a style="margin-bottom: 10px;float: left;display: grid !important;width: 20%;background: #feb236;padding: 10px;text-align: center;border-radius: 5px;color: white;font-weight: bold;line-height: 25px;" href="' .
+        echo '<a class="btn btn-primary" href="' .
             $default_menu_button_1 .
             '">' .
             $default_menu_button_name_1 .
             "</a>";
     }
     if ($default_menu_button_name_2) {
-        echo '<a style="margin-bottom: 10px;float: left;display: grid !important;width: 20%;background: #9f18d1;padding: 10px;text-align: center;border-radius: 5px;color: white;font-weight: bold;line-height: 25px;" href="' .
+        echo '<a class="btn btn-primary" href="' .
             $default_menu_button_2 .
             '">' .
             $default_menu_button_name_2 .
             "</a>";
     }
     if ($default_menu_button_name_3) {
-        echo '<a style="margin-bottom: 10px;float: left;display: grid !important;width: 20%;background: #ff7b25;padding: 10px;text-align: center;border-radius: 5px;color: white;font-weight: bold;line-height: 25px;" href="' .
+        echo '<a class="btn btn-primary" href="' .
             $default_menu_button_3 .
             '">' .
             $default_menu_button_name_3 .
             "</a>";
     }
     if ($default_menu_button_name_4) {
-        echo '<a style="margin-bottom: 10px;float: left;display: grid !important;width: 20%;background: #feb236;padding: 10px;text-align: center;border-radius: 5px;color: white;font-weight: bold;line-height: 25px;" href="' .
+        echo '<a class="btn btn-primary" href="' .
             $default_menu_button_4 .
             '">' .
             $default_menu_button_name_4 .
@@ -855,7 +769,7 @@ function domaininfo_now()
 
     foreach ($data as $result) {
         if ($result["PACKAGE"] == $default_hosting_package_3) {
-            echo '<h5><strong>Youre using the free package and you can upgrade by clicking </strong><a href="/product-category/hosting-packages/">here</a></h5>';
+        echo __("<h5><strong>Youre using the free package and you can upgrade by clicking </strong><a href='/product-category/hosting-packages/'>here</a></h5>", "Hestiacp-Wordpress");
         }
     }
 }
@@ -953,10 +867,11 @@ function domaininfomore_now()
         }
     }
     echo "</table>";
+    $Cratenewdom_text = __("<strong>Create your first domain here.</strong>", "Hestiacp-Wordpress");
     foreach ($data as $result) {
         if ($result["U_WEB_DOMAINS"] == "0") {
             echo "<div class=tip1 style=new-style >";
-            echo '<h2"><strong>Create your first domain here.</strong></h2>';
+            echo $Cratenewdom_text;
             echo "</div>";
             echo "[wpshort_registerd_form]";
         }
@@ -1175,7 +1090,7 @@ function html_form_wp()
         esc_url($_SERVER["REQUEST_URI"]) .
         '" method="post">';
     echo "<div class=wpinstall style=new-style >";
-    echo "<h2><strong>Fast WordPress installer</strong></h2>";
+    echo "<h2><strong>Fast WordPress installer</strong></h2><br /> <p>An automatic WordPress installer is a simple tool that enables users to install WordPress quickly and easily.<br />This installer allows users to create a new WordPress website or add WordPress to an existing website with just a few clicks of the mouse. With the help of this installer, even non-technical users can install WordPress without any hassle, and in just a few minutes.<br />The installer provides a user-friendly interface that allows users to choose their preferred language, username, password and set up their database details.<br />Additionally, the installer gives users the option to choose from various WordPress themes and plugins that can help them establish their website quickly and efficiently.<br />Overall, an automatic WordPress installer simplifies the process of installing WordPress and saves time and effort for website owners and developers.<br />It is an ideal solution for people who want to create a WordPress website quickly and efficiently.</p>";
     echo '<form action="' .
         esc_url($_SERVER["REQUEST_URI"]) .
         '" method="post">';
@@ -1248,7 +1163,7 @@ function rf_shortcodee()
     html_form_wp();
     deploywp_now();
     domainlist_now();
-    domaininfomore_now();
+
     return ob_get_clean();
 }
 add_shortcode("wpshort_deploywp_form", "rf_shortcodee");
@@ -1373,14 +1288,13 @@ class HestiaWordpressPlugin
 		<div class="wrap">
 				
 			<h2>Hestia Wordpress Plugin</h2>
-			<p>Please input server info</p>
-			<h2>will show server info</h2>
 			<?php settings_errors(); ?>
 
 			<form method="post" action="options.php">
 				<?php
     settings_fields("hestia_wordpress_plugin_option_group");
     do_settings_sections("hestia-wordpress-plugin-admin");
+
     submit_button();?>
 			</form>
 		</div>
@@ -1395,7 +1309,7 @@ class HestiaWordpressPlugin
         );
         add_settings_section(
             "hestia_wordpress_plugin_setting_section", // id
-            "Settings", // title
+            "Settings - Please input server info", // title
             [$this, "hestia_wordpress_plugin_section_info"], // callback
             "hestia-wordpress-plugin-admin"
         );
@@ -1408,16 +1322,8 @@ class HestiaWordpressPlugin
 
         add_settings_field(
             "server_ip_0", // id
-            "Server IP", // title
+            "Server IP/FQDN address", // title
             [$this, "server_ip_0_callback"], // callback
-            "hestia-wordpress-plugin-admin", // page
-            "hestia_wordpress_plugin_setting_section"
-            // section
-        );
-        add_settings_field(
-            "server_domain_5", // id
-            "Domain", // title
-            [$this, "server_domain_5_callback"], // callback
             "hestia-wordpress-plugin-admin", // page
             "hestia_wordpress_plugin_setting_section"
             // section
@@ -1616,8 +1522,8 @@ class HestiaWordpressPlugin
             );
         }
         if (isset($input["default_welcome_msg_4"])) {
-            $sanitary_values["default_welcome_msg_4"] = esc_textarea(
-                $input["default_welcome_msg_4"]
+            $sanitary_values["default_welcome_msg_4"] = __(
+                $input["default_welcome_msg_4"] , "Hestiacp-Wordpress"
             );
         }
         if (isset($input["default_admin_login_1"])) {
@@ -1663,11 +1569,6 @@ class HestiaWordpressPlugin
         if (isset($input["default_menu_button_name_4"])) {
             $sanitary_values["default_menu_button_name_4"] = esc_textarea(
                 $input["default_menu_button_name_4"]
-            );
-        }
-        if (isset($input["server_domain_5"])) {
-            $sanitary_values["server_domain_5"] = sanitize_text_field(
-                $input["server_domain_5"]
             );
         }
         if (isset($input["default_paidsub_5"])) {
@@ -1772,17 +1673,6 @@ class HestiaWordpressPlugin
                     $this->hestia_wordpress_plugin_options[
                         "default_welcome_msg_4"
                     ]
-                )
-                : ""
-        );
-    }
-    public function server_domain_5_callback()
-    {
-        printf(
-            '<input class="regular-text" type="text" name="hestia_wordpress_plugin_option_name[server_domain_5]" id="server_domain_5" value="%s">',
-            isset($this->hestia_wordpress_plugin_options["server_domain_5"])
-                ? esc_attr(
-                    $this->hestia_wordpress_plugin_options["server_domain_5"]
                 )
                 : ""
         );
