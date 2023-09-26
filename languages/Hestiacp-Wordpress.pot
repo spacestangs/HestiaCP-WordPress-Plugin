@@ -1,0 +1,160 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Hestiacp Wordpress control plugin\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-11 08:48+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.4; wp-6.2\n"
+"X-Domain: Hestiacp-Wordpress"
+
+#: hestiacontrol.php:66 hestiacontrol.php:1006
+msgid " enable ssl"
+msgstr ""
+
+#: hestiacontrol.php:369
+msgid "<h2 style=align: center;><strong>Wellcome</strong><br></h2>"
+msgstr ""
+
+#: hestiacontrol.php:992
+msgid "<h2><strong>ssl-enabler</strong></h2>"
+msgstr ""
+
+#: hestiacontrol.php:519
+msgid "<h2>subdomain registration</h2>"
+msgstr ""
+
+#: hestiacontrol.php:772
+msgid ""
+"<h5><strong>Youre using the free package and you can upgrade by clicking "
+"</strong><a href='/product-category/hosting-packages/'>here</a></h5>"
+msgstr ""
+
+#: hestiacontrol.php:520
+msgid "<h5>subdomain name</h5>"
+msgstr ""
+
+#: hestiacontrol.php:408
+msgid ""
+"<p>After registration, a copy of the password will be sent to your "
+"mailbox</p>"
+msgstr ""
+
+#: hestiacontrol.php:395
+msgid "<strong> I Agree </strong>"
+msgstr ""
+
+#: hestiacontrol.php:194 hestiacontrol.php:300
+msgid "<strong>Allready Upgraded</strong>"
+msgstr ""
+
+#: hestiacontrol.php:384
+msgid ""
+"<strong>Before we start you need to agree to our <p> <a href='https://anan."
+"media/2023/08/24/free-hosting-terms-and-conditions/' target='popup' "
+"onclick='window.open('https://anan.media/2023/08/24/free-hosting-terms-and-"
+"conditions/,'popup','width=600,height=600'); return false;'>terms and "
+"conditions</a> </p> </strong>"
+msgstr ""
+
+#: hestiacontrol.php:870
+msgid "<strong>Create your first domain here.</strong>"
+msgstr ""
+
+#: hestiacontrol.php:389
+msgid ""
+"After accepting the terms of use the password for cpanel will be sent by "
+"Email"
+msgstr ""
+
+#. Author of the plugin
+msgid "Alex reznik"
+msgstr ""
+
+#: hestiacontrol.php:707
+msgid "CPanel"
+msgstr ""
+
+#: hestiacontrol.php:850
+msgid "Databases"
+msgstr ""
+
+#: hestiacontrol.php:848
+msgid "DNS"
+msgstr ""
+
+#: hestiacontrol.php:934
+msgid "Domains"
+msgstr ""
+
+#. Name of the plugin
+msgid "Hestiacp Wordpress control plugin"
+msgstr ""
+
+#. Description of the plugin
+msgid "Hestiacp Wordpress DOMIAN info"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://anan.media"
+msgstr ""
+
+#: hestiacontrol.php:935
+msgid "IP"
+msgstr ""
+
+#: hestiacontrol.php:849
+msgid "Mail Boxs"
+msgstr ""
+
+#: hestiacontrol.php:746
+msgid "Package"
+msgstr ""
+
+#: hestiacontrol.php:600
+msgid "registered successfully"
+msgstr ""
+
+#: hestiacontrol.php:937
+msgid "Root Folder"
+msgstr ""
+
+#: hestiacontrol.php:847
+msgid "Sites"
+msgstr ""
+
+#: hestiacontrol.php:936
+msgid "SSL"
+msgstr ""
+
+#: hestiacontrol.php:747
+msgid "Storage"
+msgstr ""
+
+#: hestiacontrol.php:541
+msgid "submit"
+msgstr ""
+
+#: hestiacontrol.php:748
+msgid "Traffic"
+msgstr ""
+
+#: hestiacontrol.php:996
+msgid "Type a domain name to enable an SSL secure connection"
+msgstr ""
+
+#: hestiacontrol.php:745
+msgid "Username"
+msgstr ""
+
+#: hestiacontrol.php:622
+msgid "your domains"
+msgstr ""
