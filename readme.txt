@@ -1,6 +1,6 @@
 === hestiacp-register ===
 
-you need to edit the server address and login details.
+you need to edit the server address and login details in settings.
 
 made some changes .....
 plugin is translate friendly now you can use loco plugin to translate it.
