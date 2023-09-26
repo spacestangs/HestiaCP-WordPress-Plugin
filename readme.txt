@@ -2,6 +2,11 @@
 
 you need to edit the server address and login details.
 
+made some changes .....
+plugin is translate friendly now you can use loco plugin to translate it.
+some CSS been changed
+
+
 and activate plugin
 set server deteis in admin panel will appeer a tab called Hestiacp Wordpress plugin
 
